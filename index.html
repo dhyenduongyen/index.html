@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc mừng sinh nhật </title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #000;
+            font-family: 'Arial', sans-serif;
+        }
+        canvas {
+            display: block;
+        }
+        .message-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            text-align: center;
+            text-shadow: 0 0 10px #ff4d6d, 0 0 20px #ff4d6d;
+            pointer-events: none;
+            z-index: 10;
+            width: 80%;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 1.2rem;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="message-box">
+    <h1>Happy birthday ❤️</h1>
+    <p>Chúc bạn luôn vui vẻ, hạnh phúc và luôn mỉm cười nhé!</p>
+</div>
+
+<canvas id="canvas"></canvas>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const hearts = [];
+    const texts = ["Xinh đẹp", "Dễ thương", "Nhiều tiền", "Chăm ngoan", "Học giỏi"];
+
+    class Heart {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = canvas.height + Math.random() * 100;
+            this.size = Math.random() * 15 + 10;
+            this.speedY = Math.random() * 1.5 + 0.5;
+            this.text = texts[Math.floor(Math.random() * texts.length)];
+            this.opacity = Math.random() * 0.8 + 0.2;
+        }
+        update() {
+            this.y -= this.speedY;
+            if (this.y < -20) {
+                this.y = canvas.height + 20;
+                this.x = Math.random() * canvas.width;
+            }
+        }
+        draw() {
+            ctx.globalAlpha = this.opacity;
+            ctx.fillStyle = "#ff4d6d";
+            ctx.font = `${this.size}px Arial`;
+            ctx.fillText("❤️ " + this.text, this.x, this.y);
+        }
+    }
+
+    for (let i = 0; i < 40; i++) {
+        hearts.push(new Heart());
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        hearts.forEach(heart => {
+            heart.update();
+            heart.draw();
+        });
+        requestAnimationFrame(animate);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    });
+</script>
+</body>
+</html>
